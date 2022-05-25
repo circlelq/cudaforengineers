@@ -10,11 +10,11 @@
 #ifdef __APPLE__
 #include <GLUT/glut.h>
 #else
-#include <GL/glew.h>
 #include <GL/freeglut.h>
+#include <GL/glew.h>
 #endif
-#include <cuda_runtime.h>
 #include <cuda_gl_interop.h>
+#include <cuda_runtime.h>
 
 // texture and pixel objects
 GLuint pbo = 0; // OpenGL pixel buffer object
@@ -26,25 +26,30 @@ void render() {
   cudaGraphicsMapResources(1, &cuda_pbo_resource, 0);
   cudaGraphicsResourceGetMappedPointer((void **)&d_out, NULL,
                                        cuda_pbo_resource);
-  kernelLauncher(d_out, d_vol, W, H, volumeSize, method, zs, theta,
-                 threshold, dist);
+  kernelLauncher(d_out, d_vol, W, H, volumeSize, method, zs, theta, threshold,
+                 dist);
   cudaGraphicsUnmapResources(1, &cuda_pbo_resource, 0);
   char title[128];
-  sprintf(title, "Volume Visualizer : objId =%d, method = %d,"
-          " dist = %.1f, theta = %.1f", id, method, dist,
-          theta);
+  sprintf(title,
+          "Volume Visualizer : objId =%d, method = %d,"
+          " dist = %.1f, theta = %.1f",
+          id, method, dist, theta);
   glutSetWindowTitle(title);
 }
 
 void draw_texture() {
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, W, H, 0, GL_RGBA,
-    GL_UNSIGNED_BYTE, NULL);
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, W, H, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+               NULL);
   glEnable(GL_TEXTURE_2D);
   glBegin(GL_QUADS);
-  glTexCoord2f(0.0f, 0.0f); glVertex2f(0, 0);
-  glTexCoord2f(0.0f, 1.0f); glVertex2f(0, H);
-  glTexCoord2f(1.0f, 1.0f); glVertex2f(W, H);
-  glTexCoord2f(1.0f, 0.0f); glVertex2f(W, 0);
+  glTexCoord2f(0.0f, 0.0f);
+  glVertex2f(0, 0);
+  glTexCoord2f(0.0f, 1.0f);
+  glVertex2f(0, H);
+  glTexCoord2f(1.0f, 1.0f);
+  glVertex2f(W, H);
+  glTexCoord2f(1.0f, 0.0f);
+  glVertex2f(W, 0);
   glEnd();
   glDisable(GL_TEXTURE_2D);
 }
@@ -68,7 +73,7 @@ void initGLUT(int *argc, char **argv) {
 void initPixelBuffer() {
   glGenBuffers(1, &pbo);
   glBindBuffer(GL_PIXEL_UNPACK_BUFFER, pbo);
-  glBufferData(GL_PIXEL_UNPACK_BUFFER, W*H*sizeof(GLubyte)* 4, 0,
+  glBufferData(GL_PIXEL_UNPACK_BUFFER, W * H * sizeof(GLubyte) * 4, 0,
                GL_STREAM_DRAW);
   glGenTextures(1, &tex);
   glBindTexture(GL_TEXTURE_2D, tex);
@@ -86,8 +91,8 @@ void exitfunc() {
   cudaFree(d_vol);
 }
 
-int main(int argc, char** argv) {
-  cudaMalloc(&d_vol, NX*NY*NZ*sizeof(float)); // 3D volume data
+int main(int argc, char **argv) {
+  cudaMalloc(&d_vol, NX * NY * NZ * sizeof(float)); // 3D volume data
   volumeKernelLauncher(d_vol, volumeSize, id, params);
   printInstructions();
   initGLUT(&argc, argv);

@@ -6,10 +6,10 @@
 int main() {
   int cpu_res = 0;
   int gpu_res = 0;
-  int *a = (int*)malloc(N*sizeof(int));
-  int *b = (int*)malloc(N*sizeof(int));
+  int *a = (int *)malloc(N * sizeof(int));
+  int *b = (int *)malloc(N * sizeof(int));
 
-  //Initialize input arrays
+  // Initialize input arrays
   for (int i = 0; i < N; ++i) {
     a[i] = 1;
     b[i] = 1;
