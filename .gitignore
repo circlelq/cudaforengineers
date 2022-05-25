@@ -1,4 +1,7 @@
 # Created by https://www.gitignore.io/api/c,c++,cuda,visualstudio,windows,linux,osx
+#
+# tags
+tags*
 
 ### C ###
 # Object files
